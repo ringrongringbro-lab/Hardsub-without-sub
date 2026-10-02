@@ -1,4 +1,0 @@
-pyrogram==2.0.106
-tgcrypto
-cryptography
-pysubs2>=1.6
