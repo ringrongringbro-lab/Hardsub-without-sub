@@ -1,0 +1,46 @@
+name: HVID Pack
+
+on:
+  workflow_dispatch:
+    inputs:
+      chat_id:
+        description: "chat id"
+        required: true
+      video_msg:
+        description: "video message id"
+        required: true
+      sub_msg:
+        description: "subtitle message id (0 = none)"
+        required: true
+        default: "0"
+      new_name:
+        description: "new file name (empty = same)"
+        required: false
+        default: ""
+
+jobs:
+  pack:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install
+        run: pip install -r requirements.txt
+
+      - name: Pack
+        run: python packer.py
+        env:
+          API_ID: ${{ secrets.API_ID }}
+          API_HASH: ${{ secrets.API_HASH }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          HVID_SECRET: ${{ secrets.HVID_SECRET }}
+          CHAT_ID: ${{ inputs.chat_id }}
+          VIDEO_MSG: ${{ inputs.video_msg }}
+          SUB_MSG: ${{ inputs.sub_msg }}
+          NEW_NAME: ${{ inputs.new_name }}
